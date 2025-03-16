@@ -277,7 +277,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('優先度TODO'),
         actions: [
           if (_currentIndex == 0)
             IconButton(
@@ -321,7 +320,9 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               _currentIndex == 0 ? 'TODO リスト' : '長期目標',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Expanded(

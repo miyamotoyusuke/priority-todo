@@ -27,23 +27,62 @@ class _AddGoalDialogState extends State<AddGoalDialog> {
     return [
       DropdownMenuItem(
         value: 0, 
-        child: Text(
-          priorityToString(0),
-          style: Theme.of(context).textTheme.bodyMedium,
+        child: Row(
+          children: [
+            Container(
+              width: 16,
+              height: 16,
+              decoration: BoxDecoration(
+                color: priorityColor(0),
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              priorityToString(0),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
         ),
       ),
       DropdownMenuItem(
         value: 1, 
-        child: Text(
-          priorityToString(1),
-          style: Theme.of(context).textTheme.bodyMedium,
+        child: Row(
+          children: [
+            Container(
+              width: 16,
+              height: 16,
+              decoration: BoxDecoration(
+                color: priorityColor(1),
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              priorityToString(1),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
         ),
       ),
       DropdownMenuItem(
         value: 2, 
-        child: Text(
-          priorityToString(2),
-          style: Theme.of(context).textTheme.bodyMedium,
+        child: Row(
+          children: [
+            Container(
+              width: 16,
+              height: 16,
+              decoration: BoxDecoration(
+                color: priorityColor(2),
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              priorityToString(2),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
         ),
       ),
     ];
@@ -100,10 +139,14 @@ class _AddGoalDialogState extends State<AddGoalDialog> {
           },
         ),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ),
           child: Text(
             '追加',
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
               color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ),
           onPressed: () {
