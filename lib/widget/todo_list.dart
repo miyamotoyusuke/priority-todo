@@ -1,5 +1,3 @@
-// widget/todo_list.dart
-
 import 'package:flutter/material.dart';
 import '../model/todo.dart';
 import 'todo_item.dart';
@@ -23,38 +21,96 @@ class TodoList extends StatelessWidget {
     final completedTodos = todos.where((todo) => todo.isCompleted).toList();
     final incompleteTodos = todos.where((todo) => !todo.isCompleted).toList();
 
+    Widget buildTodoItem(Todo todo, int index) {
+      return GestureDetector(
+        onTap: () => onEdit(index),
+        child: Dismissible(
+          key: ValueKey(todo.id),
+          background: _buildSwipeBackground(
+            color: Colors.green,
+            alignment: Alignment.centerLeft,
+            icon: Icons.check,
+          ),
+          secondaryBackground: _buildSwipeBackground(
+            color: Colors.red,
+            alignment: Alignment.centerRight,
+            icon: Icons.delete,
+          ),
+          confirmDismiss: (direction) async {
+            if (direction == DismissDirection.startToEnd) {
+              // 右スワイプ（完了）を許可
+              onToggleComplete(index);
+              return true;
+            } else if (direction == DismissDirection.endToStart) {
+              // 左スワイプ（削除）で確認ダイアログを表示
+              final confirmDelete = await showDialog<bool>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('タスクを削除'),
+                    content: const Text('このタスクを削除してもよろしいですか？'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('キャンセル'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text('削除'),
+                      ),
+                    ],
+                  );
+                },
+              );
+              if (confirmDelete == true) {
+                onDelete(index);
+                return true;
+              }
+              return false;
+            }
+            return false;
+          },
+          child: TodoItem(
+            key: ValueKey(todo.id),
+            todo: todo
+          ),
+        ),
+      );
+    }
+
     return ListView(
       padding: const EdgeInsets.all(8),
       children: [
         const Text('未完了のタスク', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        Container(padding: const EdgeInsets.symmetric(vertical: 8.0)),
+        const SizedBox(height: 8),
         ...incompleteTodos.map((todo) {
           final index = todos.indexOf(todo);
-          return TodoItem(
-            key: ValueKey(todo.id),
-            todo: todo,
-            onToggleComplete: () => onToggleComplete(index),
-            onEdit: () => onEdit(index),
-            onDelete: () => onDelete(index),
-          );
+          return buildTodoItem(todo, index);
         }).toList(),
         const SizedBox(height: 8),
-        const Divider(
-          height: 50,
-        ),
+        const Divider(height: 50),
         const Text('完了したタスク', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        Container(padding: const EdgeInsets.symmetric(vertical: 8.0)),
+        const SizedBox(height: 8),
         ...completedTodos.map((todo) {
           final index = todos.indexOf(todo);
-          return TodoItem(
-            key: ValueKey(todo.id),
-            todo: todo,
-            onToggleComplete: () => onToggleComplete(index),
-            onEdit: () => onEdit(index),
-            onDelete: () => onDelete(index),
-          );
+          return buildTodoItem(todo, index);
         }).toList(),
       ],
+    );
+  }
+  Widget _buildSwipeBackground({
+    required Color color,
+    required Alignment alignment,
+    required IconData icon,
+  }) {
+    return Container(
+      alignment: alignment,
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8), // 背景に角丸を適用
+      ),
+      child: Icon(icon, color: Colors.white),
     );
   }
 }

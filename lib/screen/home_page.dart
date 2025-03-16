@@ -326,6 +326,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
               controller: _pageController,
               onPageChanged: (index) {
                 setState(() => _currentIndex = index);

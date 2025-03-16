@@ -1,21 +1,13 @@
-// widget/todo_item.dart
-
 import 'package:flutter/material.dart';
 import '../model/todo.dart';
 import '../util/priority_utils.dart';
 
 class TodoItem extends StatelessWidget {
   final Todo todo;
-  final VoidCallback onToggleComplete;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
 
   const TodoItem({
     Key? key,
     required this.todo,
-    required this.onToggleComplete,
-    required this.onEdit,
-    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -24,32 +16,36 @@ class TodoItem extends StatelessWidget {
       key: ValueKey(todo.id),
       elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-      child: ListTile(
-        leading: CircleAvatar(backgroundColor: priorityColor(todo.priority)),
-        title: Text(
-          todo.title,
-          style: TextStyle(
-            decoration: todo.isCompleted ? TextDecoration.lineThrough : null,
-          ),
-        ),
-        subtitle: Text(todo.days.isNotEmpty ? '繰り返し: ${todo.days.join(', ')}' : ''),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: onEdit,
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: priorityColor(todo.priority),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    todo.title,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      decoration: todo.isCompleted ? TextDecoration.lineThrough : null,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: onDelete,
-            ),
-            Checkbox(
-              value: todo.isCompleted,
-              onChanged: (bool? value) {
-                onToggleComplete();
-              },
-            ),
+            if (todo.days.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(
+                '繰り返し: ${todo.days.join(', ')}',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+            ],
           ],
         ),
       ),

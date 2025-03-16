@@ -24,7 +24,13 @@ class GoalItem extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
       child: ListTile(
         leading: CircleAvatar(backgroundColor: priorityColor(goal.priority)),
-        title: Text(goal.title),
+        title: Text(
+            goal.title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
