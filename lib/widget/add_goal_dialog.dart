@@ -25,16 +25,37 @@ class _AddGoalDialogState extends State<AddGoalDialog> {
 
   List<DropdownMenuItem<int>> get _priorityItems {
     return [
-      DropdownMenuItem(value: 0, child: Text(priorityToString(0))),
-      DropdownMenuItem(value: 1, child: Text(priorityToString(1))),
-      DropdownMenuItem(value: 2, child: Text(priorityToString(2))),
+      DropdownMenuItem(
+        value: 0, 
+        child: Text(
+          priorityToString(0),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ),
+      DropdownMenuItem(
+        value: 1, 
+        child: Text(
+          priorityToString(1),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ),
+      DropdownMenuItem(
+        value: 2, 
+        child: Text(
+          priorityToString(2),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('新しい長期目標を追加'),
+      title: Text(
+        '新しい長期目標を追加',
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -42,13 +63,20 @@ class _AddGoalDialogState extends State<AddGoalDialog> {
             TextField(
               controller: _titleController,
               maxLength: 30,
+              style: Theme.of(context).textTheme.bodyLarge,
               decoration: InputDecoration(
                 hintText: '長期目標のタイトル',
                 errorText: errorMessage,
+                hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.grey,
+                ),
               ),
             ),
             const SizedBox(height: 16),
-            const Text('優先度:'),
+            Text(
+              '優先度:',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             DropdownButton<int>(
               value: selectedPriority,
               onChanged: (int? newValue) {
@@ -63,13 +91,21 @@ class _AddGoalDialogState extends State<AddGoalDialog> {
       ),
       actions: [
         TextButton(
-          child: const Text('キャンセル'),
+          child: Text(
+            'キャンセル',
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         ElevatedButton(
-          child: const Text('追加'),
+          child: Text(
+            '追加',
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: Colors.white,
+            ),
+          ),
           onPressed: () {
             final newTitle = _titleController.text.trim();
             if (newTitle.isEmpty || newTitle.length > 30) {
