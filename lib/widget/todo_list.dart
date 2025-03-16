@@ -81,7 +81,12 @@ class TodoList extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(8),
       children: [
-        const Text('未完了のタスク', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(
+          '未完了', 
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         const SizedBox(height: 8),
         ...incompleteTodos.map((todo) {
           final index = todos.indexOf(todo);
@@ -89,7 +94,12 @@ class TodoList extends StatelessWidget {
         }).toList(),
         const SizedBox(height: 8),
         const Divider(height: 50),
-        const Text('完了したタスク', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(
+          '完了', 
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         const SizedBox(height: 8),
         ...completedTodos.map((todo) {
           final index = todos.indexOf(todo);

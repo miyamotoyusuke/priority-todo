@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart'; // FlutterFire CLIで生成されたファイル
 import 'screen/home_page.dart';
 
@@ -25,9 +26,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'タスクマネージャー',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Roboto',
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
+        ),
+        textTheme: GoogleFonts.mPlusRounded1cTextTheme(
+          Theme.of(context).textTheme,
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        useMaterial3: true,
       ),
       home: const HomePage(),
     );
