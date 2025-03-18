@@ -58,3 +58,17 @@ lib/firebase_options.dart
 android/app/google-services.json
 firebase.json
 ios/Runner/GoogleService-Info.plist
+
+# Local configuration files
+android/local.properties
+local.properties
+.gradle/
+# *.properties - Too broad, might ignore important files
+
+# Signing & certificates
+*.jks
+*.keystore
+*.p12
+*.cer
+*.mobileprovision
+key.properties
