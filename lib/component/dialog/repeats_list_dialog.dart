@@ -1,8 +1,8 @@
-// widget/repeats_list_dialog.dart
+// component/dialog/repeats_list_dialog.dart
 
 import 'package:flutter/material.dart';
-import '../model/todo.dart';
-import '../util/priority_utils.dart';
+import '../../model/todo.dart';
+import '../../core/utils/priority_utils.dart';
 import 'edit_repeat_dialog.dart';
 
 // 曜日の順序を定義
@@ -25,7 +25,10 @@ class RepeatsListDialog extends StatelessWidget {
     final repeatingTodos = todos.where((todo) => todo.days.isNotEmpty).toList();
 
     if (repeatingTodos.isEmpty) {
-      return const Text('繰り返しタスクはありません。');
+      return Text(
+        '繰り返しタスクはありません。',
+        style: Theme.of(context).textTheme.bodyLarge,
+      );
     }
 
     return SingleChildScrollView(
@@ -34,8 +37,14 @@ class RepeatsListDialog extends StatelessWidget {
         children: repeatingTodos.map((todo) {
           return ListTile(
             leading: CircleAvatar(backgroundColor: priorityColor(todo.priority)),
-            title: Text(todo.title),
-            subtitle: Text('繰り返し: ${sortDays(todo.days).join(', ')}'),
+            title: Text(
+              todo.title,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            subtitle: Text(
+              '繰り返し: ${sortDays(todo.days).join(', ')}',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
             trailing: IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {

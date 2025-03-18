@@ -1,42 +1,65 @@
 // main.dart
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'firebase_options.dart'; // FlutterFire CLIで生成されたファイル
-import 'screen/home_page.dart';
+import 'importer.dart';
+import 'app.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+// セキュアストレージのインスタンス
+const secureStorage = FlutterSecureStorage();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // 環境変数の読み込み
+  await dotenv.load(fileName: '.env');
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  //
-  await FirebaseAuth.instance.signInAnonymously(); // 匿名認証
+  
+  // 認証処理
+  await initializeAuth();
 
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+// 認証の初期化
+Future<void> initializeAuth() async {
+  try {
+    // 既存のユーザーIDを取得
+    final userId = await secureStorage.read(key: 'user_id');
+    
+    if (userId != null) {
+      // 既存のユーザーIDがある場合は匿名認証を再利用
+      try {
+        await FirebaseAuth.instance.signInWithCustomToken(userId);
+      } catch (e) {
+        // トークンが無効になっている場合は新しい匿名認証を作成
+        await createAnonymousUser();
+      }
+    } else {
+      // 新しい匿名ユーザーを作成
+      await createAnonymousUser();
+    }
+  } catch (e) {
+    // エラーハンドリング
+    print('認証エラー: $e');
+    // フォールバックとして匿名認証を使用
+    await FirebaseAuth.instance.signInAnonymously();
+  }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'タスクマネージャー',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.light,
-        ),
-        textTheme: GoogleFonts.mPlusRounded1cTextTheme(
-          Theme.of(context).textTheme,
-        ),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        useMaterial3: true,
-      ),
-      home: const HomePage(),
-    );
+// 匿名ユーザーの作成と保存
+Future<void> createAnonymousUser() async {
+  final credential = await FirebaseAuth.instance.signInAnonymously();
+  final user = credential.user;
+  if (user != null) {
+    // ユーザーIDをセキュアに保存
+    await secureStorage.write(key: 'user_id', value: user.uid);
   }
 }

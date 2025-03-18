@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../model/todo.dart';
-import '../util/priority_utils.dart';
+import '../../model/todo.dart';
+import '../../core/utils/priority_utils.dart';
 
 // 曜日の順序を定義
 const List<String> dayOrder = ['月', '火', '水', '木', '金', '土', '日'];
